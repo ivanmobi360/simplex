@@ -1,0 +1,6 @@
+/vendor/
+/nbproject/private/
+.project
+.settings
+.buildpath
+nbproject/
