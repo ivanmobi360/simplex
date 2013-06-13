@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/../src/autoload.php';
 
 
 use Symfony\Component\HttpFoundation\Response;
@@ -8,9 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 $request = Request::createFromGlobals();
 $response = new Response();
 
+$pages = __DIR__ . '/../src/pages/';
 $map = array(
-        '/hello' => __DIR__ . '/hello.php',
-        '/bye' => __DIR__ . '/bye.php'
+        '/hello' => $pages . '/hello.php',
+        '/bye' => $pages . '/bye.php'
         ); 
 
 $path = $request->getPathInfo();
