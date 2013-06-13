@@ -6,14 +6,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 $request = Request::createFromGlobals();
+$response = new Response();
 
-$input = $request->get('name', 'World');
+$map = array(
+        '/hello' => __DIR__ . '/hello.php',
+        '/bye' => __DIR__ . '/bye.php'
+        ); 
 
-$response = new Response(
-        sprintf("Hello %s", htmlspecialchars($input, ENT_QUOTES, 'UTF-8') )
-        );
-$response->setMaxAge(10);
+$path = $request->getPathInfo();
+
+if(isset($map[$path])){
+    require $map[$path];
+}else{
+    $response->setStatusCode(404);
+    $response->setContent('Not Found ' . $path);
+}
+
+
 $response->send();
-
-echo "Ip: " . $request->getClientIp();
-echo '<br><pre>'. $response;
