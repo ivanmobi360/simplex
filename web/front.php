@@ -7,6 +7,14 @@ use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
+function render_template(Request $request)
+{
+    extract($request->attributes->all());
+    ob_start();
+    include __DIR__ . '/../src/pages/' . $_route . '.php' ;
+    return new Response(ob_get_clean());
+}
+
 $request = Request::createFromGlobals();
 
 $routes = include __DIR__ . '/../src/app.php';
@@ -16,10 +24,8 @@ $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
 
 try {
-    extract($matcher->match($request->getPathInfo()), EXTR_SKIP);
-    ob_start();
-    include __DIR__ . '/../src/pages/' . $_route . '.php' ;
-    $response = new Response(ob_get_clean());
+    $request->attributes->add( $matcher->match($request->getPathInfo()) );
+    $response = call_user_func('render_template', $request);
 } catch ( ResourceNotFoundException $e) {
     $response = new Response('Not Found', 404);
 } catch (Exception $e) {
