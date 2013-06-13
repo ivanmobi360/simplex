@@ -1,16 +1,20 @@
 <?php 
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
-class LeapYearController{
-    function indexAction($request){
-        if(is_leap_year($request->attributes->get('year'))){
-            return new Response('The year is leap');
+class LeapYearController
+{
+    function indexAction($year)
+    {
+        if (is_leap_year($year)){
+            return new Response('The year is leap ');
         }
-        return new Response('Nope, the year is not leap');
+        return new Response('Nope, the year is not leap ');
     }
 }
 
@@ -27,7 +31,7 @@ function is_leap_year($year = null){
 $routes = new RouteCollection();
 $routes->add('hello', new Route('/hello/{name}', array(
         'name'=>'World',
-        '_controller' => function ($request){
+        '_controller' => function (Request $request){
             return render_template($request);
         }
         )));
@@ -39,7 +43,7 @@ $routes->add('bye', new Route('/bye', array(
 
 $routes->add('leap_year', new Route('/is_leap_year/{year}', array(
         'year' => null,
-        '_controller' => array(new LeapYearController(), 'indexAction')
+        '_controller' => 'LeapYearController::indexAction'
         )));
 
 return $routes;
