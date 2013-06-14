@@ -1,9 +1,11 @@
 <?php 
 namespace Simplex;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Simplex\ResponseEvent;
 
-class GoogleListener
+class GoogleListener implements EventSubscriberInterface
 {
     public function onResponse(ResponseEvent $event)
     {
@@ -16,4 +18,10 @@ class GoogleListener
         }
         $response->setContent($response->getContent() . 'GA Code');
     }
+	
+	public static function getSubscribedEvents ()
+    {
+        return array('response'=> 'onResponse');
+    }
+
 }

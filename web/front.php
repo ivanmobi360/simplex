@@ -33,8 +33,8 @@ $matcher = new UrlMatcher($routes, $context);
 $resolver = new ControllerResolver();
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener('response', array(new GoogleListener(), 'onResponse') );
-$dispatcher->addListener('response', array(new ContentLengthListener(), 'onResponse') , -255);
+$dispatcher->addSubscriber(new GoogleListener());
+$dispatcher->addSubscriber(new ContentLengthListener());
 
 
 

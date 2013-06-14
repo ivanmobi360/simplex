@@ -1,9 +1,11 @@
 <?php 
 namespace Simplex;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 use Simplex\ResponseEvent;
 
-class ContentLengthListener
+class ContentLengthListener implements EventSubscriberInterface
 {
     function onResponse(ResponseEvent $event)
     {
@@ -15,4 +17,10 @@ class ContentLengthListener
         }
         
     }
+    
+    public static function getSubscribedEvents ()
+    {
+        return array('response'=> array('onResponse', -255));
+    }
+    
 }
