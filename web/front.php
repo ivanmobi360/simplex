@@ -1,4 +1,8 @@
 <?php
+use Symfony\Component\HttpKernel\EventListener\ResponseListener;
+
+use Symfony\Component\HttpKernel\EventListener\ExceptionListener;
+
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
 
 use Symfony\Component\HttpKernel\HttpCache\Store;
@@ -42,7 +46,8 @@ $dispatcher = new EventDispatcher();
 //$dispatcher->addSubscriber(new GoogleListener());
 $dispatcher->addSubscriber(new ContentLengthListener());
 $dispatcher->addSubscriber(new RouterListener($matcher));
-
+$dispatcher->addSubscriber(new ExceptionListener('Calendar\\Controller\\ErrorController::exceptionAction'));
+$dispatcher->addSubscriber(new ResponseListener('UTF-8'));
 
 $framework = new \Simplex\Framework($dispatcher, $resolver);
 $framework = new HttpCache($framework, new Store(__DIR__ .'/../cache'));
