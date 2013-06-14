@@ -1,4 +1,6 @@
 <?php
+use Symfony\Component\HttpKernel\EventListener\RouterListener;
+
 use Symfony\Component\HttpKernel\HttpCache\Store;
 
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
@@ -37,12 +39,12 @@ $matcher = new UrlMatcher($routes, $context);
 $resolver = new ControllerResolver();
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addSubscriber(new GoogleListener());
+//$dispatcher->addSubscriber(new GoogleListener());
 $dispatcher->addSubscriber(new ContentLengthListener());
+$dispatcher->addSubscriber(new RouterListener($matcher));
 
 
-
-$framework = new \Simplex\Framework($dispatcher, $matcher, $resolver);
+$framework = new \Simplex\Framework($dispatcher, $resolver);
 $framework = new HttpCache($framework, new Store(__DIR__ .'/../cache'));
 $response = $framework->handle($request);
 

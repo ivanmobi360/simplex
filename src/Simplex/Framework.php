@@ -1,6 +1,8 @@
 <?php 
 namespace Simplex;
 
+use Symfony\Component\HttpKernel\HttpKernel;
+
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -12,8 +14,9 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 
 
-class Framework implements HttpKernelInterface
+class Framework extends HttpKernel// implements HttpKernelInterface
 {
+    /*
     protected $matcher;
     protected $resolver;
     protected $dispatcher;
@@ -44,5 +47,5 @@ class Framework implements HttpKernelInterface
         
         return $response;
     }
-    
+    */
 }
