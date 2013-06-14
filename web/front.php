@@ -1,4 +1,8 @@
 <?php
+use Simplex\ContentLengthListener;
+
+use Simplex\GoogleListener;
+
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
@@ -29,27 +33,8 @@ $matcher = new UrlMatcher($routes, $context);
 $resolver = new ControllerResolver();
 
 $dispatcher = new EventDispatcher();
-$dispatcher->addListener('response', function(Simplex\ResponseEvent $event){
-    $response = $event->getResponse();
-    if ($response->isRedirection()
-       || ($response->headers->has('Content-Type') && false == strpos($response->headers->get('Content-Type', 'html')   )      )
-       || 'html' != $event->getRequest()->getRequestFormat()     
-            ){
-        return;
-    }
-    $response->setContent($response->getContent() . 'GA Code');
-    
-});
-
-$dispatcher->addListener('response', function(Simplex\ResponseEvent $event){
-    $response = $event->getResponse();
-    $headers = $response->headers;
-
-    if(!$headers->has('Content-Length') && !$headers->has('Transfer-Encoding')){
-        $headers->set('Content-Length', strlen($response->getContent()));
-    }
-
-}, -255);
+$dispatcher->addListener('response', array(new GoogleListener(), 'onResponse') );
+$dispatcher->addListener('response', array(new ContentLengthListener(), 'onResponse') , -255);
 
 
 
