@@ -27,6 +27,8 @@ $routes = include __DIR__ . '/../src/app.php';
 $sc = include __DIR__ . '/../src/container.php';
 //$framework = new HttpCache($framework, new Store(__DIR__ .'/../cache'));
 
+$sc->setParameter('charset', 'UTF-8');
+
 $sc->register('listener.string_response', 'Simplex\StringResponseListener');
 $sc->getDefinition('dispatcher')
     ->addMethodCall('addSubscriber', array(new Reference('listener.string_response')));

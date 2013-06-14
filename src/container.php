@@ -14,7 +14,7 @@ $sc->register('listener.router', 'Symfony\Component\HttpKernel\EventListener\Rou
     ->setArguments(array(new Reference('matcher')));
 
 $sc->register('listener.response', 'Symfony\Component\HttpKernel\EventListener\ResponseListener')
-    ->setArguments(array('UTF-8'));
+    ->setArguments(array('%charset%'));
 
 $sc->register('listener.exception', 'Symfony\Component\HttpKernel\EventListener\ExceptionListener')
     ->setArguments(array('Calendar\\Controller\\ErrorController::exceptionAction'));
