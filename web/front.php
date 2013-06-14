@@ -44,12 +44,14 @@ $dispatcher->addListener('response', function(Simplex\ResponseEvent $event){
 $dispatcher->addListener('response', function(Simplex\ResponseEvent $event){
     $response = $event->getResponse();
     $headers = $response->headers;
-    
+
     if(!$headers->has('Content-Length') && !$headers->has('Transfer-Encoding')){
         $headers->set('Content-Length', strlen($response->getContent()));
     }
-    
-});
+
+}, -255);
+
+
 
 $framework = new \Simplex\Framework($dispatcher, $matcher, $resolver);
 $response = $framework->handle($request);
