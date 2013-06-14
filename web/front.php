@@ -1,4 +1,6 @@
 <?php
+use Simplex\StringResponseListener;
+
 use Symfony\Component\HttpKernel\EventListener\ResponseListener;
 
 use Symfony\Component\HttpKernel\EventListener\ExceptionListener;
@@ -48,6 +50,8 @@ $dispatcher->addSubscriber(new ContentLengthListener());
 $dispatcher->addSubscriber(new RouterListener($matcher));
 $dispatcher->addSubscriber(new ExceptionListener('Calendar\\Controller\\ErrorController::exceptionAction'));
 $dispatcher->addSubscriber(new ResponseListener('UTF-8'));
+$dispatcher->addSubscriber(new StringResponseListener());
+
 
 $framework = new \Simplex\Framework($dispatcher, $resolver);
 $framework = new HttpCache($framework, new Store(__DIR__ .'/../cache'));
