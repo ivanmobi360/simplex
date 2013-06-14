@@ -1,4 +1,8 @@
 <?php
+use Symfony\Component\HttpKernel\HttpCache\Store;
+
+use Symfony\Component\HttpKernel\HttpCache\HttpCache;
+
 use Simplex\ContentLengthListener;
 
 use Simplex\GoogleListener;
@@ -39,6 +43,7 @@ $dispatcher->addSubscriber(new ContentLengthListener());
 
 
 $framework = new \Simplex\Framework($dispatcher, $matcher, $resolver);
+$framework = new HttpCache($framework, new Store(__DIR__ .'/../cache'));
 $response = $framework->handle($request);
 
 $response->send();
