@@ -19,13 +19,12 @@ $sc->register('listener.response', 'Symfony\Component\HttpKernel\EventListener\R
 $sc->register('listener.exception', 'Symfony\Component\HttpKernel\EventListener\ExceptionListener')
     ->setArguments(array('Calendar\\Controller\\ErrorController::exceptionAction'));
 
-$sc->register('listener.string_response', 'Simplex\StringResponseListener');
+
 
 $sc->register('dispatcher', 'Symfony\Component\EventDispatcher\EventDispatcher' )
     ->addMethodCall('addSubscriber', array(new Reference('listener.router')))
     ->addMethodCall('addSubscriber', array(new Reference('listener.response')))
     ->addMethodCall('addSubscriber', array(new Reference('listener.exception')))
-    ->addMethodCall('addSubscriber', array(new Reference('listener.string_response')))
 ;
 
 $sc->register('framework', 'Simplex\Framework')
