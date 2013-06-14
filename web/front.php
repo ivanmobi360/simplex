@@ -1,4 +1,6 @@
 <?php
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -26,7 +28,20 @@ $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
 $resolver = new ControllerResolver();
 
-$framework = new \Simplex\Framework($matcher, $resolver);
+$dispatcher = new EventDispatcher();
+$dispatcher->addListener('response', function(Simplex\ResponseEvent $event){
+    $response = $event->getResponse();
+    if ($response->isRedirection()
+       || ($response->headers->has('Content-Type') && false == strpos($response->headers->get('Content-Type', 'html')   )      )
+       || 'html' != $event->getRequest()->getRequestFormat()     
+            ){
+        return;
+    }
+    $response->setContent($response->getContent() . 'GA Code');
+    
+});
+
+$framework = new \Simplex\Framework($dispatcher, $matcher, $resolver);
 $response = $framework->handle($request);
 
 $response->send();
