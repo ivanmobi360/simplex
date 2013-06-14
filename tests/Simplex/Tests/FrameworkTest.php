@@ -4,6 +4,8 @@ namespace Simplex\Tests;
 
 
 
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -32,8 +34,8 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
     
     function testControllerResponse()
     {
-        $mathcer = $this->getMock('Symfony\Component\Routing\Matcher\UrlMatcherInterface');
-        $mathcer
+        $matcher = $this->getMock('Symfony\Component\Routing\Matcher\UrlMatcherInterface');
+        $matcher
             ->expects($this->once())
             ->method('match')
             ->will($this->returnValue(array(
@@ -45,7 +47,7 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
                     )));
             
         $resolver = new ControllerResolver();
-        $framework = new Framework($mathcer, $resolver);
+        $framework = new Framework(new EventDispatcher(), $matcher, $resolver);
         $response = $framework->handle(new Request());
         
         $this->assertEquals(200, $response->getStatusCode());
@@ -63,6 +65,6 @@ class FrameworkTest extends \PHPUnit_Framework_TestCase
             ->will($this->throwException($exception))
             ;
         $resolver = $this->getMock('Symfony\Component\HttpKernel\Controller\ControllerResolverInterface');
-        return new Framework($matcher, $resolver);
+        return new Framework(new EventDispatcher(), $matcher, $resolver);
     }
 }
